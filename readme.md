@@ -81,3 +81,7 @@ POST (application/json)
 ```
 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAgAElEQVR4Xu2dCbxN5frHn2OKiFMRUkjmMt/...........
 ```
+
+## 常见问题
+- Q:echarts 只有表，但是数据没有显示是为什么
+    A:把series中的animation设置为false
