@@ -1,7 +1,82 @@
 const puppeteer = require('puppeteer');
 
-const render = async function(options,width,height){
-    const browser = await puppeteer.launch({headless:false});
+const originList = [
+    {
+        tooltip: {
+            trigger: 'axis'
+        },
+        radar: [
+            {
+                name: {
+                textStyle: {
+                    color: '#fff',
+                    backgroundColor: '#696969',
+                    borderRadius: 3,
+                    padding: [3, 5]
+               }
+            },
+                axisLabel:
+                    {
+                        showMaxLabel:true,
+                        showMinLabel:true
+                        
+                    },
+                indicator: [
+                    {text: '安全', max: 1.0,axisLabel:{show:true,showMaxLabel:true,color:'#171230',showMinLabel:true}},
+                    {text: '轻微风险', max: 1.0},
+                    {text: '较大风险', max: 1.0},
+                    {text: '重大风险', max: 1.0},
+                    {text: '特别重大风险', max: 1.0},
+                ],
+            },
+        ],
+        series: [
+            {
+                animation:false,
+                name:'test',
+                type: 'radar',
+                sysbol:'cricle',
+                symbolSize:'8',
+                data: [
+                    {
+                        value: [0, 0.874, 0.126, 0,0],
+                        itemStyle:{
+                            normal:{
+                                color:'black',
+                                borderColor:'red',
+                                borderWidth:5
+                            }
+                        },
+                        lineStyle:{
+                            color:'#4a32c8',
+                            width:5
+                        },
+                        label:{
+                                show:true,
+                                position:'bottom',
+                                fontSize:15,
+                                formatter:()=>{
+                                    return value;
+                                },
+                        }
+                    }
+                ]
+            },
+        ]
+    }
+]
+
+
+const render = async function(dataSet,width,height,index){
+    let options = originList[index];
+    switch(index){
+        case 0:
+            options.series[0].data[0].value = dataSet;
+            break;
+        default:
+    }
+    
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     // await page.goto('https://www.baidu.com');
     // await page.screenshot({path:'example.png'});
@@ -17,7 +92,7 @@ const render = async function(options,width,height){
         }
     },options);
 
-    await page.addScriptTag({url:'https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts-en.common.min.js'});
+    await page.addScriptTag({url:'https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js'});
 
     await page.addScriptTag({
         content:`
@@ -37,8 +112,9 @@ const render = async function(options,width,height){
     });
     console.log(base64);
     //await page.screenshot({path:'example.png'});
-    return base64;
     browser.close();
+    return base64;
+    
 };
 
 /* let options ={

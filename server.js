@@ -4,7 +4,10 @@ const app = express();
 const {render_e} = require('./echarts_generator');
 const {render_h} = require('./highcharts_generator');
 
-app.post("/echarts",bodyParser.json(),async function(req,res){
+app.use(bodyParser.json());//数据JSON类型
+app.use(bodyParser.urlencoded({ extended: false }));//解析post请求数据
+
+app.post("/echarts",async function(req,res){
     console.log(req);
     /* let options ={
         title: {
@@ -24,12 +27,13 @@ app.post("/echarts",bodyParser.json(),async function(req,res){
             data: [5, 20, 36, 10, 10, 20]
         }]
     };  */
-    console.log(req);
-    let options = req.body.options;
-    //let width = req.body.width;
-    //let height = req.body.height;
-    console.log(options);
-    //let base = await render_e(options,width,height);
+    //console.log(req.body);
+    let dataSet = JSON.parse(req.body.dataSet);
+    let width = req.body.width;
+    let height = req.body.height;
+    let index = parseInt(req.body.index);
+    //console.log(options);
+    let base = await render_e(dataSet,width,height,index);
     res.send(base);
 })
 
@@ -58,10 +62,11 @@ app.post("/highcharts",async function(req,res){
             data: [5, 7, 3]
         }]
     }; */
-    let options = req.body.options;
+    let dataSet = req.body.dataSet;
     let width = req.body.width;
     let height = req.body.height;
-    let base = await render_h(options);
+    let index = req.body.index;
+    let base = await render_h(dataSet,width,height,index);
     res.send(base);
 })
 
