@@ -5,7 +5,7 @@ const {render_e} = require('./echarts_generator');
 const {render_h} = require('./highcharts_generator');
 
 app.post("/echarts",bodyParser.json(),async function(req,res){
-    console.log(req);
+    //console.log(req);
     /* let options ={
         title: {
             text: 'ECharts 入门示例'
@@ -24,7 +24,7 @@ app.post("/echarts",bodyParser.json(),async function(req,res){
             data: [5, 20, 36, 10, 10, 20]
         }]
     };  */
-    console.log(req);
+    //console.log(req);
     let options = req.body.options;
     let width = req.body.width;
     let height = req.body.height;
@@ -33,7 +33,7 @@ app.post("/echarts",bodyParser.json(),async function(req,res){
     res.send(base);
 })
 
-app.post("/highcharts",async function(req,res){
+app.post("/highcharts",bodyParser.json(),async function(req,res){
 
     /* var options = {
         chart: {

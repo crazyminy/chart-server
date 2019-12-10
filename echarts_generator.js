@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 const render = async function(options,width,height){
-    const browser = await puppeteer.launch({headless:false});
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     // await page.goto('https://www.baidu.com');
     // await page.screenshot({path:'example.png'});
@@ -35,7 +35,7 @@ const render = async function(options,width,height){
     let base64 = await page.evaluate(()=>{
         return myChart.getDataURL();
     });
-    console.log(base64);
+    //console.log(base64);
     //await page.screenshot({path:'example.png'});
     browser.close();
     return base64;
