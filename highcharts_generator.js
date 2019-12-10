@@ -40,59 +40,12 @@ const render = async function(options,width,height){
         let base64 = canvas.toDataURL()
         return base64;
     });
-    //console.log(base64);
-    //await page.screenshot({path:'example.png'});
+    
+    browser.close();
     return base64;
-    //browser.close();
+    
 };
 
-/* let options ={
-    title: {
-        text: 'ECharts 入门示例'
-    },
-    tooltip: {},
-    legend: {
-        data:['销量']
-    },
-    xAxis: {
-        data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-    },
-    yAxis: {},
-    series: [{
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20]
-    }]
-}; */
-//render(options);
 
-
-
-/* 
-Echars 导出图片
-
-
-
-
-(opts: {
-    // 导出的格式，可选 png, jpeg
-    type?: string,
-    // 导出的图片分辨率比例，默认为 1。
-    pixelRatio?: number,
-    // 导出的图片背景色，默认使用 option 里的 backgroundColor
-    backgroundColor?: string,
-    // 忽略组件的列表，例如要忽略 toolbox 就是 ['toolbox']
-    excludeComponents?: Array.<string>
-}) => string
-导出图表图片，返回一个 base64 的 URL，可以设置为Image的src。
-
-示例：
-
-var img = new Image();
-img.src = myChart.getDataURL({
-    pixelRatio: 2,
-    backgroundColor: '#fff'
-});
-*/
 
 exports.render_h = render;

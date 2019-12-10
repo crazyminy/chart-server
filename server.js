@@ -26,10 +26,10 @@ app.post("/echarts",bodyParser.json(),async function(req,res){
     };  */
     console.log(req);
     let options = req.body.options;
-    //let width = req.body.width;
-    //let height = req.body.height;
-    console.log(options);
-    //let base = await render_e(options,width,height);
+    let width = req.body.width;
+    let height = req.body.height;
+    //console.log(options);
+    let base = await render_e(options,width,height);
     res.send(base);
 })
 

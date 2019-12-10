@@ -37,8 +37,8 @@ const render = async function(options,width,height){
     });
     console.log(base64);
     //await page.screenshot({path:'example.png'});
-    return base64;
     browser.close();
+    return base64;
 };
 
 /* let options ={
