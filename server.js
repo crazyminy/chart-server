@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const app = express();
 const {render_e} = require('./echarts_generator');
 const {render_h} = require('./highcharts_generator');
+var template = require('./template');
 
 app.use(bodyParser.json());//数据JSON类型
 app.use(bodyParser.urlencoded({ extended: false }));//解析post请求数据
@@ -27,8 +28,9 @@ app.post("/echarts",async function(req,res){
             data: [5, 20, 36, 10, 10, 20]
         }]
     };  */
-    //console.log(req.body);
-    let dataSet = JSON.parse(req.body.dataSet);
+    console.log(req.body);
+    let dataSet = req.body.dataSet;
+    //let dataSet = JSON.parse(req.body.dataSet);
     let width = req.body.width;
     let height = req.body.height;
     let index = parseInt(req.body.index);
@@ -62,12 +64,17 @@ app.post("/highcharts",async function(req,res){
             data: [5, 7, 3]
         }]
     }; */
-    let dataSet = req.body.dataSet;
+    //let dataSet = req.body.dataSet;
     let width = req.body.width;
     let height = req.body.height;
     let index = req.body.index;
-    let base = await render_h(dataSet,width,height,index);
+    let base = await render_h({},width,height,index);
     res.send(base);
+})
+
+app.post("/test",function(req,res){
+    console.log(template[0]);
+    res.send("2333333");
 })
 
 app.listen(3000);
