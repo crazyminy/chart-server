@@ -1,13 +1,40 @@
 const puppeteer = require('puppeteer');
 
-const render = async function(options,width,height){
-    const browser = await puppeteer.launch();
+var template = require('./template');
+
+
+const render = async function(dataSet,width,height,index){
+
+    let options = template[index];
+    switch(index){
+        case 0:
+            options.series[0].data.push(dataSet);
+            break;
+        case 5:
+            options.series[0].data[0].value = dataSet.data0;
+            options.series[1].name = dataSet.data0[0];
+            options.series[1].data[0].value = dataSet.data1;
+            options.series[2].name = dataSet.data0[1];
+            options.series[2].data[0].value = dataSet.data2;
+            options.series[3].name = dataSet.data0[2];
+            options.series[3].data[0].value = dataSet.data3;
+            options.series[4].name = dataSet.data0[3];
+            options.series[4].data[0].value = dataSet.data4;
+            options.series[5].name = dataSet.data0[4];
+            options.series[5].data[0].value = dataSet.data5;
+            //options.series[6].name = dataSet.data0[5];
+            options.series[6].data[0].value = dataSet.data6;
+            break;
+        default:
+    }
+    
+    const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
     // await page.goto('https://www.baidu.com');
     // await page.screenshot({path:'example.png'});
 
     await page.setContent(
-        `<div id="container" style="width:${width}px;height:${height}px" ></div>`
+        `<div id="container" style="width:${width}px;height:${height}px" ></div><img id="myimg">`
     );
 
     //传递options对象到evaluate函数中，挂载到window对象的全局属性中
@@ -17,7 +44,7 @@ const render = async function(options,width,height){
         }
     },options);
 
-    await page.addScriptTag({url:'https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts-en.common.min.js'});
+    await page.addScriptTag({url:'https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js'});
 
     await page.addScriptTag({
         content:`
@@ -35,10 +62,14 @@ const render = async function(options,width,height){
     let base64 = await page.evaluate(()=>{
         return myChart.getDataURL();
     });
-    //console.log(base64);
+    console.log(base64);
+    page.evaluate((base64)=>{
+        document.getElementById("myimg").setAttribute("src",base64);
+    },base64);
     //await page.screenshot({path:'example.png'});
-    browser.close();
+    //browser.close();
     return base64;
+    
 };
 
 /* let options ={

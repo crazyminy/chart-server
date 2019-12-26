@@ -1,6 +1,26 @@
 const puppeteer = require('puppeteer');
+var template = require('./template');
 
-const render = async function(options,width,height){
+const render = async function(data_series = {},width,height,index){
+    let options = template[index];
+    switch(index){
+        case 0:
+            options.series[0].data = data_series;
+            break;
+        case 1:
+        case 2:
+        case 3:
+            let subtitle = data_series.subtitle;
+            let categories = data_series.categories;
+            let series = data_series.series;
+            options.subtitle.text = subtitle;
+            options.xAxis.categories = categories;
+            options.series = series;
+            break;
+        case 4:
+            options.series = data_series;
+
+    }
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     // await page.goto('https://www.baidu.com');
@@ -21,6 +41,7 @@ const render = async function(options,width,height){
     await page.addScriptTag({url:'https://cdn.bootcss.com/canvg/1.5/canvg.min.js'});
     await page.addScriptTag({url:'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'});
     await page.addScriptTag({url:'https://code.highcharts.com/modules/exporting.js'});
+    await page.addScriptTag({url:'http://cdn.hcharts.cn/highcharts/highcharts-3d.js'});
 
     await page.addScriptTag({
         content:`
@@ -40,8 +61,9 @@ const render = async function(options,width,height){
         let base64 = canvas.toDataURL()
         return base64;
     });
-    
-    browser.close();
+    //console.log(base64);
+    //await page.screenshot({path:'example.png'});
+    browser.close()
     return base64;
     
 };
