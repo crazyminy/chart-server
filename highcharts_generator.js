@@ -2,26 +2,58 @@ const puppeteer = require('puppeteer');
 var template = require('./template');
 
 const render = async function(data_series = {},width,height,index){
-    let options = template[index];
+    let options = template[6];
+    
     switch(index){
         case 0:
-            options.series[0].data = data_series;
+             
             break;
         case 1:
+            //安全文明柱状图
+            options.title.text = data_series.title;
+            options.subtitle.text = data_series.subtitle;
+            options.xAxis.categories = data_series.categories;
+            options.series = data_series.series;
+            break;
         case 2:
+            //饼图
+            options.title.text = data_series.title;
+            options.series[0].data = data_series.data;
+            break;
         case 3:
-            let subtitle = data_series.subtitle;
-            let categories = data_series.categories;
-            let series = data_series.series;
-            options.subtitle.text = subtitle;
-            options.xAxis.categories = categories;
-            options.series = series;
+            //风险柱状图
+            options.title.text = data_series.title;
+            options.series = data_series.series;
             break;
         case 4:
-            options.series = data_series;
-
+            //管理行为评估柱状图
+            options.title.text = data_series.title;
+            options.xAxis.categories = data_series.categories;
+            options.series = data_series.series;
+            break;
+        case 6:
+            //实测实量
+            options.title.text = data_series.title;
+            options.xAxis.categories = data_series.categories;
+            options.series = data_series.series;
+            break;
+        case 7:
+            //质量风险
+            options.title.text = data_series.title;
+            options.subtitle.text = data_series.subtitle;
+            options.xAxis.categories = data_series.categories;
+            options.series = data_series.series;
+            break;
+        case 8:
+            //综合评估
+            options.title.text = data_series.title;
+            options.xAxis.categories = data_series.categories;
+            options.series = data_series.series;
+            break;
     }
-    const browser = await puppeteer.launch();
+    /**/
+    
+    const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
     // await page.goto('https://www.baidu.com');
     // await page.screenshot({path:'example.png'});
@@ -37,11 +69,12 @@ const render = async function(data_series = {},width,height,index){
         }
     },options);
 
-    await page.addScriptTag({url:'http://cdn.highcharts.com.cn/highcharts/highcharts.js'});
+    await page.addScriptTag({url:'https://code.highcharts.com.cn/highcharts/highcharts.js'});
+    await page.addScriptTag({url:'https://code.highcharts.com.cn/highcharts-plugins/highcharts-zh_CN.js'});
     await page.addScriptTag({url:'https://cdn.bootcss.com/canvg/1.5/canvg.min.js'});
-    await page.addScriptTag({url:'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'});
+    await page.addScriptTag({url:'https://code.highcharts.com.cn/jquery/jquery-1.8.3.min.js'});
     await page.addScriptTag({url:'https://code.highcharts.com/modules/exporting.js'});
-    await page.addScriptTag({url:'http://cdn.hcharts.cn/highcharts/highcharts-3d.js'});
+    //await page.addScriptTag({url:'http://cdn.hcharts.cn/highcharts/highcharts-3d.js'});
 
     await page.addScriptTag({
         content:`
@@ -63,11 +96,12 @@ const render = async function(data_series = {},width,height,index){
     });
     //console.log(base64);
     //await page.screenshot({path:'example.png'});
-    browser.close()
+    //browser.close()
     return base64;
     
 };
 
+render();
 
 
 exports.render_h = render;

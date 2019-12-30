@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const app = express();
 const {render_e} = require('./echarts_generator');
 const {render_h} = require('./highcharts_generator');
+const {render_m} = require('./jsmind_generator');
 var template = require('./template');
 
 app.use(bodyParser.json());//数据JSON类型
@@ -69,6 +70,13 @@ app.post("/highcharts",bodyParser.json(),async function(req,res){
     let height = req.body.height;
     let index = req.body.index;
     let base = await render_h({},width,height,index);
+    res.send(base);
+})
+
+app.post("/jsmind",bodyParser.json(),async function(req,res){
+
+    //let index = req.body.index;
+    let base = await render_m({},0);
     res.send(base);
 })
 
